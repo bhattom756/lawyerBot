@@ -1,18 +1,23 @@
 import OpenAI from 'openai';
 
-if (!process.env.OPENAI_API_KEY) {
-  throw new Error('OPENAI_API_KEY environment variable is required');
-}
+// Initialize OpenAI client only if API key is available
+let openai: OpenAI | null = null;
 
-export const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+if (process.env.OPENAI_API_KEY) {
+  openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+}
 
 export async function generateAgentResponse(
   prompt: string,
   context: string,
   temperature: number = 0.7
 ): Promise<string> {
+  if (!openai) {
+    return 'I apologize, but the AI service is not properly configured. Please check the OpenAI API key configuration.';
+  }
+
   try {
     const response = await openai.chat.completions.create({
       model: 'gpt-4o',
@@ -43,6 +48,15 @@ export async function analyzeCase(caseDescription: string): Promise<{
   keyIssues: string[];
   legalTheory: string;
 }> {
+  if (!openai) {
+    return {
+      plaintiff: 'Complainant',
+      defendant: 'Respondent',
+      keyIssues: ['Disputed facts', 'Conflicting accounts', 'Resolution needed'],
+      legalTheory: 'General dispute resolution principles apply'
+    };
+  }
+
   try {
     const response = await openai.chat.completions.create({
       model: 'gpt-4o',
@@ -81,3 +95,5 @@ export async function analyzeCase(caseDescription: string): Promise<{
     };
   }
 }
+
+export { openai };

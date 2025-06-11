@@ -13,6 +13,7 @@ import {
   FileText
 } from 'lucide-react';
 import { TrialPhase } from '@/lib/types';
+import { cn } from '@/lib/utils';
 
 interface TrialControlsProps {
   isPlaying: boolean;
