@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generateAgentResponse, getAgentPrompt } from '@/lib/openai';
+import { generateAgentResponse } from '@/lib/openai';
+import { getAgentPrompt } from '@/lib/agents';
 import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(request: NextRequest) {

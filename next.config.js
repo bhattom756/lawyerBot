@@ -5,6 +5,12 @@ const nextConfig = {
   },
   images: { unoptimized: true },
   optimizeFonts: false,
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.externals.push('encoding');
+    }
+    return config;
+  },
   // Remove static export for API routes to work
 };
 
