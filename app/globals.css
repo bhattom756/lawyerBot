@@ -82,6 +82,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   }
 }
 
@@ -107,25 +108,39 @@
     height: 0;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
-    border-top: 8px solid hsl(var(--card));
+    border-top: 8px solid rgba(255, 255, 255, 0.1);
   }
   
   .typewriter {
     overflow: hidden;
-    border-right: 2px solid hsl(var(--accent));
+    border-right: 2px solid rgba(255, 255, 255, 0.8);
     white-space: nowrap;
     animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+  }
+
+  .glassmorphism {
+    backdrop-filter: blur(16px) saturate(180%);
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+  }
+
+  .glassmorphism-dark {
+    backdrop-filter: blur(16px) saturate(180%);
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
   }
 }
 
 @keyframes pulse-glow {
   0%, 100% { 
-    box-shadow: 0 0 5px hsl(var(--accent) / 0.5);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
     transform: scale(1);
   }
   50% { 
-    box-shadow: 0 0 20px hsl(var(--accent) / 0.8);
-    transform: scale(1.02);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.6);
+    transform: scale(1.05);
   }
 }
 
@@ -136,5 +151,38 @@
 
 @keyframes blink-caret {
   from, to { border-color: transparent; }
-  50% { border-color: hsl(var(--accent)); }
+  50% { border-color: rgba(255, 255, 255, 0.8); }
+}
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Enhanced focus states */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
 }

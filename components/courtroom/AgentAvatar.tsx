@@ -12,43 +12,43 @@ interface AgentAvatarProps {
 
 export function AgentAvatar({ agent, size = 'md', showName = false }: AgentAvatarProps) {
   const sizeClasses = {
-    sm: 'w-8 h-8 text-sm',
-    md: 'w-12 h-12 text-lg',
-    lg: 'w-16 h-16 text-2xl'
+    sm: 'w-10 h-10 text-sm',
+    md: 'w-14 h-14 text-lg',
+    lg: 'w-20 h-20 text-2xl'
   };
 
   const roleColors = {
-    judge: 'bg-judicial text-white border-gold',
-    lawyer_plaintiff: 'bg-blue-500 text-white border-blue-300',
-    lawyer_defendant: 'bg-red-500 text-white border-red-300',
-    jury: 'bg-amber-500 text-white border-amber-300'
+    judge: 'bg-gradient-to-br from-amber-500 to-orange-600 text-white border-amber-400',
+    lawyer_plaintiff: 'bg-gradient-to-br from-blue-500 to-cyan-600 text-white border-blue-400',
+    lawyer_defendant: 'bg-gradient-to-br from-red-500 to-pink-600 text-white border-red-400',
+    jury: 'bg-gradient-to-br from-purple-500 to-indigo-600 text-white border-purple-400'
   };
 
   return (
-    <div className="flex flex-col items-center space-y-1">
+    <div className="flex flex-col items-center space-y-2">
       <Avatar 
         className={cn(
           sizeClasses[size],
           roleColors[agent.role],
-          agent.speaking && 'agent-speaking ring-2 ring-accent ring-opacity-75',
-          'transition-all duration-300 border-2'
+          agent.speaking && 'ring-4 ring-white/50 shadow-2xl animate-pulse',
+          'transition-all duration-300 border-2 shadow-lg'
         )}
       >
         <AvatarFallback className={cn(
-          'font-semibold',
+          'font-bold text-white',
           roleColors[agent.role]
         )}>
           {agent.avatar}
         </AvatarFallback>
       </Avatar>
       {showName && (
-        <span className="text-xs font-medium text-center">{agent.name}</span>
+        <span className="text-xs font-medium text-center text-white">{agent.name}</span>
       )}
       {agent.speaking && (
         <div className="flex space-x-1">
-          <div className="w-1 h-1 bg-accent rounded-full animate-bounce" />
-          <div className="w-1 h-1 bg-accent rounded-full animate-bounce delay-100" />
-          <div className="w-1 h-1 bg-accent rounded-full animate-bounce delay-200" />
+          <div className="w-2 h-2 bg-white rounded-full animate-bounce" />
+          <div className="w-2 h-2 bg-white rounded-full animate-bounce delay-100" />
+          <div className="w-2 h-2 bg-white rounded-full animate-bounce delay-200" />
         </div>
       )}
     </div>

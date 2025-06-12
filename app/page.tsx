@@ -7,7 +7,7 @@ import { SpeechBubble } from '@/components/courtroom/SpeechBubble';
 import { TrialControls } from '@/components/courtroom/TrialControls';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
-import { Agent, Case, Message, TrialPhase, TestCase } from '@/lib/types';
+import { Agent, Case, Message, TrialPhase } from '@/lib/types';
 
 export default function Home() {
   // State management
@@ -22,13 +22,13 @@ export default function Home() {
   const [currentSpeaker, setCurrentSpeaker] = useState<string | null>(null);
 
   // Initialize trial
-  const startTrial = async (caseDescription: string, testCase?: TestCase) => {
+  const startTrial = async (caseDescription: string) => {
     setIsLoading(true);
     try {
       const response = await fetch('/api/trial/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ caseDescription, testCase }),
+        body: JSON.stringify({ caseDescription }),
       });
 
       if (!response.ok) throw new Error('Failed to start trial');
@@ -200,9 +200,12 @@ export default function Home() {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-gradient-to-br from-slate-50 to-slate-100">
+    <div className="h-screen flex flex-col bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%239C92AC" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
+
       {/* Header */}
-      <div className="flex-none p-4 bg-white border-b border-slate-200">
+      <div className="flex-none p-4 backdrop-blur-xl bg-white/10 border-b border-white/20 relative z-10">
         <TrialControls
           isPlaying={isPlaying}
           currentPhase={currentPhase!}
@@ -217,27 +220,31 @@ export default function Home() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden relative z-10">
         {/* Courtroom Layout */}
-        <div className="flex-1 relative">
-          <CourtRoomLayout
-            agents={agents}
-            currentPhase={currentPhase!}
-            caseTitle={currentCase.title}
-          />
+        <div className="flex-1 relative overflow-auto">
+          <ScrollArea className="h-full">
+            <div className="min-h-full p-4">
+              <CourtRoomLayout
+                agents={agents}
+                currentPhase={currentPhase!}
+                caseTitle={currentCase.title}
+              />
+            </div>
+          </ScrollArea>
         </div>
 
         {/* Messages Panel */}
-        <div className="w-96 bg-white border-l border-slate-200 flex flex-col">
-          <div className="p-4 border-b bg-slate-50">
-            <h3 className="font-semibold text-slate-700">Trial Proceedings</h3>
-            <p className="text-sm text-slate-500">
+        <div className="w-96 backdrop-blur-xl bg-white/10 border-l border-white/20 flex flex-col">
+          <div className="p-4 border-b border-white/20 bg-white/5">
+            <h3 className="font-semibold text-white text-lg">Trial Proceedings</h3>
+            <p className="text-blue-200 text-sm">
               {messages.length} statements recorded
             </p>
           </div>
           
-          <ScrollArea className="flex-1 p-4">
-            <div className="space-y-4">
+          <ScrollArea className="flex-1">
+            <div className="p-4 space-y-4">
               {messages.map((message, index) => {
                 const agent = agents.find(a => a.id === message.agentId);
                 if (!agent) return null;
@@ -249,6 +256,7 @@ export default function Home() {
                     agent={agent}
                     isLatest={index === messages.length - 1}
                     onSpeakComplete={handleSpeakComplete}
+                    voiceEnabled={voiceEnabled}
                   />
                 );
               })}

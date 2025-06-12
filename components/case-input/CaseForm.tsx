@@ -5,131 +5,88 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { sampleCases } from '@/lib/sample-cases';
-import { TestCase } from '@/lib/types';
 import { Gavel, Sparkles } from 'lucide-react';
 
 interface CaseFormProps {
-  onSubmit: (caseDescription: string, testCase?: TestCase) => void;
+  onSubmit: (caseDescription: string) => void;
   isLoading?: boolean;
 }
 
 export function CaseForm({ onSubmit, isLoading = false }: CaseFormProps) {
   const [caseDescription, setCaseDescription] = useState('');
-  const [selectedSample, setSelectedSample] = useState<TestCase | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const description = selectedSample?.context || caseDescription;
-    if (description.trim()) {
-      onSubmit(description, selectedSample || undefined);
+    if (caseDescription.trim()) {
+      onSubmit(caseDescription);
     }
   };
 
-  const handleSampleSelect = (sample: TestCase) => {
-    setSelectedSample(sample);
-    setCaseDescription(sample.context);
-  };
-
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <div className="text-center mb-8">
-        <div className="flex items-center justify-center space-x-3 mb-4">
-          <Gavel className="w-8 h-8 text-judicial" />
-          <h1 className="text-4xl font-bold text-judicial">LawyerBot Tribunal</h1>
-          <Gavel className="w-8 h-8 text-judicial scale-x-[-1]" />
-        </div>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Enter your dispute and watch AI lawyers battle it out in court. 
-          Our digital tribunal will hear both sides and deliver a verdict.
-        </p>
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-6">
-        {/* Sample Cases */}
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-4 flex items-center space-x-2">
-            <Sparkles className="w-5 h-5 text-accent" />
-            <span>Try a Sample Case</span>
-          </h2>
-          <div className="space-y-3">
-            {sampleCases.map((sample) => (
-              <Card
-                key={sample.id}
-                className={`p-4 cursor-pointer transition-all hover:shadow-md border-2 ${
-                  selectedSample?.id === sample.id 
-                    ? 'border-accent bg-accent/5' 
-                    : 'border-border hover:border-accent/50'
-                }`}
-                onClick={() => handleSampleSelect(sample)}
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <h3 className="font-medium text-sm mb-1">{sample.title}</h3>
-                    <p className="text-xs text-muted-foreground mb-2">
-                      {sample.description}
-                    </p>
-                    <Badge variant="outline" className="text-xs">
-                      {sample.category}
-                    </Badge>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </Card>
-
-        {/* Custom Case Input */}
-        <Card className="p-6">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Label htmlFor="case-description" className="text-lg font-semibold">
-                Describe Your Dispute
-              </Label>
-              <p className="text-sm text-muted-foreground mb-3">
-                Provide details about the conflict, who's involved, and what happened.
-              </p>
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center p-6">
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%239C92AC" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
+      
+      <div className="w-full max-w-2xl relative z-10">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="flex items-center justify-center space-x-3 mb-6">
+            <div className="p-3 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 shadow-lg">
+              <Gavel className="w-8 h-8 text-white" />
             </div>
-            
-            <Textarea
-              id="case-description"
-              placeholder="Example: My roommate keeps eating my food without asking. I buy groceries every week, but when I go to cook dinner, half my ingredients are gone. They claim they'll pay me back but never do. This has been going on for two months and I'm spending twice as much on food..."
-              value={caseDescription}
-              onChange={(e) => setCaseDescription(e.target.value)}
-              className="min-h-[200px] resize-none"
-              required
-            />
-            
-            <div className="flex items-center justify-between pt-4">
-              <div className="text-sm text-muted-foreground">
-                {selectedSample && (
-                  <div className="flex items-center space-x-2">
-                    <Badge variant="secondary">{selectedSample.title}</Badge>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => {
-                        setSelectedSample(null);
-                        setCaseDescription('');
-                      }}
-                    >
-                      Clear
-                    </Button>
-                  </div>
-                )}
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
+              LawyerBot Tribunal
+            </h1>
+            <div className="p-3 rounded-full bg-gradient-to-r from-orange-500 to-amber-400 shadow-lg">
+              <Gavel className="w-8 h-8 text-white scale-x-[-1]" />
+            </div>
+          </div>
+          <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
+            Enter your dispute and watch AI lawyers battle it out in court. 
+            Our digital tribunal will hear both sides and deliver a verdict.
+          </p>
+        </div>
+
+        {/* Main Form Card */}
+        <Card className="backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl rounded-3xl overflow-hidden">
+          <div className="p-8">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-3">
+                <Label htmlFor="case-description" className="text-2xl font-semibold text-white flex items-center space-x-2">
+                  <Sparkles className="w-6 h-6 text-amber-400" />
+                  <span>Describe Your Dispute</span>
+                </Label>
+                <p className="text-blue-100 text-lg leading-relaxed">
+                  Provide details about the conflict, who's involved, and what happened.
+                </p>
               </div>
               
-              <Button
-                type="submit"
-                disabled={isLoading || !caseDescription.trim()}
-                className="bg-judicial hover:bg-judicial/90 text-white px-8"
-              >
-                {isLoading ? 'Starting Trial...' : 'Begin Trial'}
-              </Button>
-            </div>
-          </form>
+              <Textarea
+                id="case-description"
+                placeholder="Example: My roommate keeps eating my food without asking. I buy groceries every week, but when I go to cook dinner, half my ingredients are gone. They claim they'll pay me back but never do. This has been going on for two months and I'm spending twice as much on food..."
+                value={caseDescription}
+                onChange={(e) => setCaseDescription(e.target.value)}
+                className="min-h-[200px] resize-none backdrop-blur-sm bg-white/10 border-white/30 text-white placeholder:text-blue-200 text-lg rounded-2xl focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all duration-300"
+                required
+              />
+              
+              <div className="flex justify-center pt-4">
+                <Button
+                  type="submit"
+                  disabled={isLoading || !caseDescription.trim()}
+                  className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-12 py-4 text-xl font-semibold rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                >
+                  {isLoading ? (
+                    <div className="flex items-center space-x-2">
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <span>Starting Trial...</span>
+                    </div>
+                  ) : (
+                    'Begin Trial'
+                  )}
+                </Button>
+              </div>
+            </form>
+          </div>
         </Card>
       </div>
     </div>
